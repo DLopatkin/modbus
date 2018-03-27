@@ -34,7 +34,7 @@ public class Slave extends Thread {
 
             slave = ModbusSlaveFactory.createModbusSlaveTCP(tcpParameters);
             Modbus.setLogLevel(Modbus.LogLevel.LEVEL_RELEASE);
-            slave.setReadTimeout(10000);
+            slave.setReadTimeout(120000);
 
             MyOwnDataHolder dh = new MyOwnDataHolder();
             dh.addEventListener(new ModbusEventListener() {

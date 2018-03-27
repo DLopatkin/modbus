@@ -1,4 +1,6 @@
 import TestClasses.Station;
+import com.intelligt.modbus.jlibmodbus.exception.ModbusIOException;
+
 import java.util.Map;
 import java.util.Queue;
 
@@ -47,5 +49,10 @@ public class SimpleTest extends TestClasses.TestBase {
             }
 
         } while (msg.equals("Confirm") == false);
+        try {
+            con.disconnect();
+        } catch (ModbusIOException e) {
+            e.printStackTrace();
+        }
     }
 }
