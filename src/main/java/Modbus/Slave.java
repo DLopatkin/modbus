@@ -1,4 +1,4 @@
-package TestClasses;
+package Modbus;
 
 import com.intelligt.modbus.jlibmodbus.Modbus;
 import com.intelligt.modbus.jlibmodbus.data.DataHolder;
@@ -6,6 +6,7 @@ import com.intelligt.modbus.jlibmodbus.data.ModbusCoils;
 import com.intelligt.modbus.jlibmodbus.data.ModbusHoldingRegisters;
 import com.intelligt.modbus.jlibmodbus.exception.IllegalDataAddressException;
 import com.intelligt.modbus.jlibmodbus.exception.IllegalDataValueException;
+import com.intelligt.modbus.jlibmodbus.exception.ModbusIOException;
 import com.intelligt.modbus.jlibmodbus.slave.ModbusSlave;
 import com.intelligt.modbus.jlibmodbus.slave.ModbusSlaveFactory;
 import com.intelligt.modbus.jlibmodbus.tcp.TcpParameters;
@@ -16,15 +17,18 @@ import java.util.List;
 
 public class Slave extends Thread {
     private int port;
+    private ModbusSlave slave = null;
 
     public Slave(int port){
         this.port = port;
     }
 
+    public void shutdown() throws ModbusIOException {
+        slave.shutdown();
+    }
+
     public void run() {
         try {
-
-            final ModbusSlave slave;
 
             TcpParameters tcpParameters = new TcpParameters();
 

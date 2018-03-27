@@ -1,5 +1,8 @@
-import TestClasses.Slave;
-import TestClasses.Station;
+package test.classes;
+
+import Modbus.Message;
+import Modbus.Slave;
+import Modbus.Station;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,7 +16,7 @@ public class main {
         Slave slv = new Slave(7777);
         slv.start();
 
-        // Задержка для того что бы Slave успел забиндить порт.
+        // Задержка для того что бы Modbus.Slave успел забиндить порт.
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -27,15 +30,19 @@ public class main {
         Map<Integer, Station> stats = new HashMap<Integer, Station>();
         stats.put(1, new Station(1, "localhost", 7777));
 
-        Queue<String> in = new LinkedList<String>();
+        Queue<Message> in = new LinkedList<Message>();
         Queue<String> out = new LinkedList<String>();
-        in.add("Set");
-        in.add("Confirm");
+        in.add(new Message("Set", 1));
+        in.add(new Message("Set", 1));
+        in.add(new Message("Confirm", 1));
+        in.add(new Message("Exit", 0));
 
         test.run(in, out, stats,0);
 
         while (!out.isEmpty()) {
             System.out.println(out.poll());
         }
+
+        System.exit(0);
     }
 }

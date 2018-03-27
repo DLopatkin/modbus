@@ -1,4 +1,5 @@
-import TestClasses.Slave;
+import Modbus.MasterCon;
+import Modbus.Slave;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

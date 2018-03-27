@@ -1,23 +1,29 @@
-import TestClasses.Station;
+package test.classes;
+
+import Modbus.MasterCon;
+import Modbus.Message;
+import Modbus.Station;
 import com.intelligt.modbus.jlibmodbus.exception.ModbusIOException;
 
 import java.util.Map;
 import java.util.Queue;
 
-public class SimpleTest extends TestClasses.TestBase {
-    public void run(Queue<String> in, Queue<String> out, Map<Integer, Station> stations, int param) {
-        String msg;
-
+public class SimpleTest extends TestBase {
+    public void run(Queue<Message> in, Queue<String> out, Map<Integer, Station> stations, int param) {
+        Message msg;
         MasterCon con = null;
 
         do {
             while(in.isEmpty());
 
             msg = in.poll();
-            if (msg.equals("Set")) {
+            if (msg.command.equals("Set")) {
 
-                Station station = stations.get(1);
-                con = new MasterCon(station.host, station.port);
+                Station station = stations.get(msg.id);
+                if (station.con == null) {
+                    station.con = new MasterCon(station.host, station.port);
+                }
+                con = station.con;
 
                 boolean isSetInitial = false;
                 boolean isSetNew = false;
@@ -46,13 +52,16 @@ public class SimpleTest extends TestClasses.TestBase {
                     out.add("Изделие успешно модифицировано");
                 else
                     out.add("Изделие модифицировано некорректно");
+            } else if (msg.command.equals("Confirm")) {
+                Station station = stations.get(msg.id);
+
+                try {
+                    station.con.disconnect();
+                } catch (ModbusIOException e) {
+                    e.printStackTrace();
+                }
             }
 
-        } while (msg.equals("Confirm") == false);
-        try {
-            con.disconnect();
-        } catch (ModbusIOException e) {
-            e.printStackTrace();
-        }
+        } while (msg.command.equals("Exit") == false);
     }
 }
