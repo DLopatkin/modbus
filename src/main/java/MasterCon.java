@@ -15,10 +15,10 @@ public abstract class MasterCon {
     private ModbusMaster master;
 
     /**
-     *
-     * @param ip
-     * @param port
-     * @param id
+     *Constructor
+     * @param ip slave's ip
+     * @param port port
+     * @param id slave's id
      */
     public MasterCon(String ip, int port,  int id) {
         this.id = id;
