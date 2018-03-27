@@ -1,3 +1,5 @@
+package TestClasses;
+
 import com.intelligt.modbus.jlibmodbus.Modbus;
 import com.intelligt.modbus.jlibmodbus.data.DataHolder;
 import com.intelligt.modbus.jlibmodbus.data.ModbusCoils;
@@ -31,7 +33,7 @@ public class Slave extends Thread {
             tcpParameters.setPort(port);
 
             slave = ModbusSlaveFactory.createModbusSlaveTCP(tcpParameters);
-            //Modbus.setLogLevel(Modbus.LogLevel.LEVEL_VERBOSE);
+            Modbus.setLogLevel(Modbus.LogLevel.LEVEL_RELEASE);
             slave.setReadTimeout(10000);
 
             MyOwnDataHolder dh = new MyOwnDataHolder();
@@ -85,7 +87,7 @@ public class Slave extends Thread {
             slave.getDataHolder().setDiscreteInputs(cs);
             slave.setServerAddress(1);
             /*
-             * using master-branch it should be #slave.open();
+             * using master-branch it should be #station.open();
              */
 
             slave.listen();
@@ -108,7 +110,7 @@ public class Slave extends Thread {
                 }
 
                 /*
-                 * using master-branch it should be #slave.close();
+                 * using master-branch it should be #station.close();
                  */
                 slave.shutdown();
             }
