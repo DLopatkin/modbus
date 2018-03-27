@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ModbusTest {
 
-    MasterCon con = new testCon("localhost",7777,1);
+    MasterCon con = new MasterCon("localhost",7777);
     static Slave slave = new Slave(7777);
 
     @BeforeAll

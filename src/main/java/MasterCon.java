@@ -7,9 +7,9 @@ import com.intelligt.modbus.jlibmodbus.tcp.TcpParameters;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public abstract class MasterCon {
+public class MasterCon {
 
-    private int id;
+    private final int id = 1;
     private int port;
     private String ip;
     private ModbusMaster master;
@@ -18,10 +18,8 @@ public abstract class MasterCon {
      *Constructor
      * @param ip slave's ip
      * @param port port
-     * @param id slave's id
      */
-    public MasterCon(String ip, int port,  int id) {
-        this.id = id;
+    public MasterCon(String ip, int port) {
         this.port = port;
         this.ip = ip;
     }
@@ -142,10 +140,5 @@ public abstract class MasterCon {
     public void writeMultipleCoils(int startAddress, boolean[] coils) throws Exception {
         master.writeMultipleCoils(id, startAddress, coils);
     }
-
-    /**
-     *This method should be implemented in child classes
-     */
-    public abstract void process();
 
 }

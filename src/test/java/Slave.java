@@ -31,25 +31,25 @@ public class Slave extends Thread {
             tcpParameters.setPort(port);
 
             slave = ModbusSlaveFactory.createModbusSlaveTCP(tcpParameters);
-            Modbus.setLogLevel(Modbus.LogLevel.LEVEL_VERBOSE);
+            //Modbus.setLogLevel(Modbus.LogLevel.LEVEL_VERBOSE);
             slave.setReadTimeout(10000);
 
             MyOwnDataHolder dh = new MyOwnDataHolder();
             dh.addEventListener(new ModbusEventListener() {
                 public void onWriteToSingleCoil(int address, boolean value) {
-                    System.out.print("onWriteToSingleCoil: address " + address + ", value " + value);
+                    //System.out.print("onWriteToSingleCoil: address " + address + ", value " + value);
                 }
 
                 public void onWriteToMultipleCoils(int address, int quantity, boolean[] values) {
-                    System.out.print("onWriteToMultipleCoils: address " + address + ", quantity " + quantity);
+                    //System.out.print("onWriteToMultipleCoils: address " + address + ", quantity " + quantity);
                 }
 
                 public void onWriteToSingleHoldingRegister(int address, int value) {
-                    System.out.print("onWriteToSingleHoldingRegister: address " + address + ", value " + value);
+                    //System.out.print("onWriteToSingleHoldingRegister: address " + address + ", value " + value);
                 }
 
                 public void onWriteToMultipleHoldingRegisters(int address, int quantity, int[] values) {
-                    System.out.print("onWriteToMultipleHoldingRegisters: address " + address + ", quantity " + quantity);
+                    //System.out.print("onWriteToMultipleHoldingRegisters: address " + address + ", quantity " + quantity);
                 }
             });
 
