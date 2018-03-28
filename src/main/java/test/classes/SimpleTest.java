@@ -1,51 +1,41 @@
 package test.classes;
 
-import Modbus.MasterCon;
 import Modbus.Station;
 import com.intelligt.modbus.jlibmodbus.exception.ModbusIOException;
 
-import java.util.Map;
 import java.util.Queue;
 
 public class SimpleTest extends TestBase {
-    public void run(Queue<String> in, Queue<String> out, Map<Integer, Station> stations, int param) {
-        String[] msg;
-        int id;
-        MasterCon con = null;
+    public void run(Queue<String> in, Queue<String> out, Station station, int param) {
+        String msg;
 
         do {
             while(in.isEmpty());
 
-            msg = in.poll().split("_");
-            if (msg[0].equals("Set")) {
-                id = Integer.parseInt(msg[1]);
+            msg = in.poll();
 
-                Station station = stations.get(id);
-                if (station.con == null) {
-                    station.con = new MasterCon(station.host, station.port);
-                }
-                con = station.con;
+            if (msg.equals("Set")) {
 
                 boolean isSetInitial = false;
                 boolean isSetNew = false;
                 try {
-                    con.connect();
+                    station.connect();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                if (con.isConnected())
-                    out.add("Связь со станцией " + id + " установлена");
+                if (station.isConnected())
+                    out.add("Связь со станцией " + station.getId() + " установлена");
                 else {
-                    out.add("Нет связи с станцией " + id );
+                    out.add("Нет связи с станцией " + station.getId() );
                     return;
                 }
                 try {
-                    isSetInitial = (con.readCoils(0,1))[0];
-                    con.writeSingleCoil(0,!isSetInitial);
+                    isSetInitial = (station.readCoils(0,1))[0];
+                    station.writeSingleCoil(0,!isSetInitial);
                     isSetNew = isSetInitial;
                     Thread.sleep(1000);
-                    isSetNew = (con.readCoils(0,1))[0];
+                    isSetNew = (station.readCoils(0,1))[0];
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -54,18 +44,15 @@ public class SimpleTest extends TestBase {
                     out.add("Изделие успешно модифицировано");
                 else
                     out.add("Изделие модифицировано некорректно");
-            } else if (msg[0].equals("Confirm")) {
-                id = Integer.parseInt(msg[1]);
-                Station station = stations.get(id);
-
+            } else if(msg.equals("Confirm")) {
                 try {
-                    station.con.disconnect();
-                    out.add("Соединение со станцией " + id + " закрыто.");
+                    station.disconnect();
+                    out.add("Соединение со станцией " + station.getId() + " закрыто.");
                 } catch (ModbusIOException e) {
                     e.printStackTrace();
                 }
             }
 
-        } while (!msg[0].equals("Exit"));
+        } while (!msg.equals("Exit"));
     }
 }
