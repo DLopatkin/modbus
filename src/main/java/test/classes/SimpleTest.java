@@ -14,45 +14,39 @@ public class SimpleTest extends TestBase {
 
             msg = in.poll();
 
-            if (msg.equals("Set")) {
+            if (msg.equals("Check")) {
 
                 boolean isSetInitial = false;
                 boolean isSetNew = false;
-                try {
-                    station.connect();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
-                if (station.isConnected())
+                if (station.isConnected()) {
                     out.add("Связь со станцией " + station.getId() + " установлена");
-                else {
-                    out.add("Нет связи с станцией " + station.getId() );
+                    try {
+                        isSetInitial = (station.readCoils(0, 1))[0];
+                        station.writeSingleCoil(0, !isSetInitial);
+                        isSetNew = isSetInitial;
+                        Thread.sleep(1000);
+                        isSetNew = (station.readCoils(0, 1))[0];
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //Проверка на то что бит выставился и param четный.
+                    if (isSetInitial == !isSetNew && param % 2 == 0)
+                        out.add("Изделие успешно модифицировано");
+                    else
+                        out.add("Изделие модифицировано некорректно");
+                }
+                    else {
+                    out.add("Нет связи со станцией " + station.getId() );
                     return;
                 }
-                try {
-                    isSetInitial = (station.readCoils(0,1))[0];
-                    station.writeSingleCoil(0,!isSetInitial);
-                    isSetNew = isSetInitial;
-                    Thread.sleep(1000);
-                    isSetNew = (station.readCoils(0,1))[0];
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                //Проверка на то что бит выставился и param четный.
-                if ( isSetInitial == !isSetNew && param % 2 == 0 )
-                    out.add("Изделие успешно модифицировано");
-                else
-                    out.add("Изделие модифицировано некорректно");
-            } else if(msg.equals("Confirm")) {
-                try {
-                    station.disconnect();
-                    out.add("Соединение со станцией " + station.getId() + " закрыто.");
-                } catch (ModbusIOException e) {
-                    e.printStackTrace();
-                }
             }
-
-        } while (!msg.equals("Exit"));
+        } while (!msg.equals("Confirm"));
+        try {
+            station.disconnect();
+            out.add("Соединение со станцией " + station.getId() + " закрыто.");
+        } catch (ModbusIOException e) {
+            e.printStackTrace();
+        }
     }
 }

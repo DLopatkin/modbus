@@ -2,7 +2,9 @@ package test.classes;
 
 import Modbus.Station;
 import Modbus.Slave;
+import com.intelligt.modbus.jlibmodbus.exception.ModbusIOException;
 
+import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -29,9 +31,17 @@ public class main {
 
         Queue<String> in = new LinkedList<String>();
         Queue<String> out = new LinkedList<String>();
-        in.add("Set");
+        in.add("Check");
         in.add("Confirm");
-        in.add("Exit");
+
+        // Установка соединения со станцией.
+        try {
+            station.connect();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (ModbusIOException e) {
+            e.printStackTrace();
+        }
 
         test.run(in, out, station,0);
 
