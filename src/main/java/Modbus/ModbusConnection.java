@@ -9,23 +9,17 @@ import com.intelligt.modbus.jlibmodbus.tcp.TcpParameters;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class Station {
+public class ModbusConnection {
 
-    private int id;
+    private int ID;
     private int port;
-    private String ip;
+    private String IPAddress;
+
+
     private ModbusMaster master;
 
-    public int getId() {
-        return id;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public String getIp() {
-        return ip;
+    public int getID() {
+        return ID;
     }
 
     /**
@@ -33,9 +27,9 @@ public class Station {
      * @param ip slave's ip
      * @param port port
      */
-    public Station(int id, String ip, int port) {
-        this.id = id;
-        this.ip = ip;
+    public ModbusConnection(int id, String ip, int port) {
+        this.ID = id;
+        this.IPAddress = ip;
         this.port = port;
     }
 
@@ -46,7 +40,7 @@ public class Station {
      */
     public void connect() throws UnknownHostException, ModbusIOException {
         TcpParameters tcpParameters = new TcpParameters();
-        tcpParameters.setHost(InetAddress.getByName(ip));
+        tcpParameters.setHost(InetAddress.getByName(IPAddress));
         tcpParameters.setKeepAlive(true);
         tcpParameters.setPort(port);
 
@@ -80,7 +74,7 @@ public class Station {
      * @throws Exception
      */
     public int[] readInputRegisters(int startAddress, int quantity) throws Exception {
-        return master.readInputRegisters(id, startAddress, quantity);
+        return master.readInputRegisters(ID, startAddress, quantity);
     }
 
     /**
@@ -91,7 +85,7 @@ public class Station {
      * @throws Exception
      */
     public int[] readHoldingRegisters(int startAddress, int quantity) throws Exception {
-        return  master.readHoldingRegisters(id, startAddress,quantity);
+        return  master.readHoldingRegisters(ID, startAddress,quantity);
     }
 
     /**
@@ -101,7 +95,7 @@ public class Station {
      * @throws Exception
      */
     public void writeSingleRegister(int startAddress, int register) throws Exception {
-        master.writeSingleRegister(id, startAddress, register);
+        master.writeSingleRegister(ID, startAddress, register);
     }
 
     /**
@@ -111,7 +105,7 @@ public class Station {
      * @throws Exception
      */
     public void writeMultipleRegisters(int startAddress, int[] registers) throws Exception {
-        master.writeMultipleRegisters(id, startAddress, registers);
+        master.writeMultipleRegisters(ID, startAddress, registers);
     }
 
     /**
@@ -122,7 +116,7 @@ public class Station {
      * @throws Exception
      */
     public boolean[] readDiscreteInputs(int startAddress, int quantity) throws Exception {
-        return master.readDiscreteInputs(id, startAddress, quantity);
+        return master.readDiscreteInputs(ID, startAddress, quantity);
     }
 
     /**
@@ -133,7 +127,7 @@ public class Station {
      * @throws Exception
      */
     public boolean[] readCoils(int startAddress, int quantity) throws Exception {
-        return master.readCoils(id, startAddress, quantity);
+        return master.readCoils(ID, startAddress, quantity);
     }
 
     /**
@@ -143,7 +137,7 @@ public class Station {
      * @throws Exception
      */
     public void writeSingleCoil(int startAddress, boolean flag) throws Exception {
-        master.writeSingleCoil(id, startAddress, flag);
+        master.writeSingleCoil(ID, startAddress, flag);
     }
 
     /**
@@ -153,7 +147,6 @@ public class Station {
      * @throws Exception
      */
     public void writeMultipleCoils(int startAddress, boolean[] coils) throws Exception {
-        master.writeMultipleCoils(id, startAddress, coils);
+        master.writeMultipleCoils(ID, startAddress, coils);
     }
-
 }

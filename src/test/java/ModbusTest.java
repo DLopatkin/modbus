@@ -1,4 +1,4 @@
-import Modbus.Station;
+import Modbus.ModbusConnection;
 import Modbus.Slave;
 import org.junit.jupiter.api.*;
 
@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ModbusTest {
 
-    Station con = new Station(1,"localhost",7777);
+    ModbusConnection con = new ModbusConnection(1,"localhost",7777);
     static Slave slave = new Slave(7777);
 
     @BeforeAll

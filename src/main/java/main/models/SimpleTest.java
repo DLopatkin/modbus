@@ -1,10 +1,9 @@
-package test.classes;
+package main.models;
 
-import Modbus.ModbusConnection;
 import java.util.Queue;
 
 public class SimpleTest extends TestBase {
-    public void run(Queue<String> out, ModbusConnection station, int param) {
+    public void run(Queue<String> out, Station station, int param) {
         boolean isSetInitial = false;
         boolean isSetNew = false;
 

@@ -1,6 +1,6 @@
 package test.classes;
 
-import Modbus.Station;
+import Modbus.ModbusConnection;
 import Modbus.Slave;
 import com.intelligt.modbus.jlibmodbus.exception.ModbusIOException;
 
@@ -26,27 +26,30 @@ public class main {
             System.out.println("Станция запущена");
         }
 
-        Station station = new Station(1, "localhost", 7777);
+        ModbusConnection modbusConnection = new ModbusConnection(1, "localhost", 7777);
 
 
-        Queue<String> in = new LinkedList<String>();
         Queue<String> out = new LinkedList<String>();
-        in.add("Check");
-        in.add("Confirm");
 
         // Установка соединения со станцией.
         try {
-            station.connect();
+            modbusConnection.connect();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (ModbusIOException e) {
             e.printStackTrace();
         }
 
-        test.run(in, out, station,0);
+        test.run(out, modbusConnection,0);
 
         while (!out.isEmpty()) {
             System.out.println(out.poll());
+        }
+
+        try {
+            modbusConnection.disconnect();
+        } catch (ModbusIOException e) {
+            e.printStackTrace();
         }
 
         System.exit(0);
