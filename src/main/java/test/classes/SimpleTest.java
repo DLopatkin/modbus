@@ -35,9 +35,9 @@ public class SimpleTest extends TestBase {
                 }
 
                 if (con.isConnected())
-                    out.add("Связь с изделием установлена");
+                    out.add("Связь со станцией " + id + " установлена");
                 else {
-                    out.add("Нет связи с изделием");
+                    out.add("Нет связи с станцией " + id );
                     return;
                 }
                 try {
@@ -60,6 +60,7 @@ public class SimpleTest extends TestBase {
 
                 try {
                     station.con.disconnect();
+                    out.add("Соединение со станцией " + id + " закрыто.");
                 } catch (ModbusIOException e) {
                     e.printStackTrace();
                 }
