@@ -1,6 +1,5 @@
 package test.classes;
 
-import Modbus.Message;
 import Modbus.Slave;
 import Modbus.Station;
 
@@ -30,12 +29,11 @@ public class main {
         Map<Integer, Station> stats = new HashMap<Integer, Station>();
         stats.put(1, new Station(1, "localhost", 7777));
 
-        Queue<Message> in = new LinkedList<Message>();
+        Queue<String> in = new LinkedList<String>();
         Queue<String> out = new LinkedList<String>();
-        in.add(new Message("Set", 1));
-        in.add(new Message("Set", 1));
-        in.add(new Message("Confirm", 1));
-        in.add(new Message("Exit", 0));
+        in.add("Set_1");
+        in.add("Confirm_1");
+        in.add("Exit");
 
         test.run(in, out, stats,0);
 

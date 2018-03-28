@@ -1,7 +1,6 @@
 package test.classes;
 
 import Modbus.MasterCon;
-import Modbus.Message;
 import Modbus.Station;
 import com.intelligt.modbus.jlibmodbus.exception.ModbusIOException;
 
@@ -9,17 +8,19 @@ import java.util.Map;
 import java.util.Queue;
 
 public class SimpleTest extends TestBase {
-    public void run(Queue<Message> in, Queue<String> out, Map<Integer, Station> stations, int param) {
-        Message msg;
+    public void run(Queue<String> in, Queue<String> out, Map<Integer, Station> stations, int param) {
+        String[] msg;
+        int id;
         MasterCon con = null;
 
         do {
             while(in.isEmpty());
 
-            msg = in.poll();
-            if (msg.command.equals("Set")) {
+            msg = in.poll().split("_");
+            if (msg[0].equals("Set")) {
+                id = Integer.parseInt(msg[1]);
 
-                Station station = stations.get(msg.id);
+                Station station = stations.get(id);
                 if (station.con == null) {
                     station.con = new MasterCon(station.host, station.port);
                 }
@@ -48,12 +49,14 @@ public class SimpleTest extends TestBase {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if (isSetInitial == !isSetNew)
+                //Проверка на то что бит выставился и param четный.
+                if ( isSetInitial == !isSetNew && param % 2 == 0 )
                     out.add("Изделие успешно модифицировано");
                 else
                     out.add("Изделие модифицировано некорректно");
-            } else if (msg.command.equals("Confirm")) {
-                Station station = stations.get(msg.id);
+            } else if (msg[0].equals("Confirm")) {
+                id = Integer.parseInt(msg[1]);
+                Station station = stations.get(id);
 
                 try {
                     station.con.disconnect();
@@ -62,6 +65,6 @@ public class SimpleTest extends TestBase {
                 }
             }
 
-        } while (msg.command.equals("Exit") == false);
+        } while (!msg[0].equals("Exit"));
     }
 }
